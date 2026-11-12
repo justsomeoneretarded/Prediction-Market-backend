@@ -1,0 +1,59 @@
+# Full Tinbit stack. Expects the frontend repo checked out next to this one:
+#   ./prediction-market-backend   (this repo)
+#   ./prediction-market-frontend
+#
+#   cp .env.example .env          # set POSTGRES_PASSWORD etc.
+#   docker compose up -d --build
+#   docker compose exec api npm run db:seed     # optional demonstration data
+name: tinbit
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tinbit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: tinbit
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-tinbit} -d tinbit']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    ports: ['127.0.0.1:5432:5432']
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-tinbit}:${POSTGRES_PASSWORD}@db:5432/tinbit?schema=public
+      PORT: 4000
+    ports: ['127.0.0.1:4000:4000']
+
+  web:
+    build:
+      context: ../prediction-market-frontend
+      args: { API_URL: 'http://api:4000' }
+    restart: unless-stopped
+    depends_on:
+      api: { condition: service_healthy } # the web app never starts against an unavailable API
+    ports: ['3000:3000']
+
+  # Daily logical backups; files older than 14 days are pruned. Restore: docs/OPERATIONS.md
+  backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGUSER: ${POSTGRES_USER:-tinbit}
+    volumes: ['./backups:/backups', './scripts:/scripts:ro']
+    entrypoint: ['/bin/sh', '/scripts/backup-loop.sh']
+
+volumes:
+  pgdata:

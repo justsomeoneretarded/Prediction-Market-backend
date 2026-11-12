@@ -1,0 +1,2756 @@
+{
+ "generatedBy": "scripts/codemap.mjs",
+ "nodes": [
+  {
+   "id": "prediction-market-backend/src/admin/admin.controller.ts",
+   "repo": "api",
+   "module": "api/admin",
+   "summary": "── markets ──",
+   "exports": [
+    "AdminController"
+   ],
+   "lines": 171
+  },
+  {
+   "id": "prediction-market-backend/src/admin/admin.module.ts",
+   "repo": "api",
+   "module": "api/admin",
+   "summary": "",
+   "exports": [
+    "AdminModule"
+   ],
+   "lines": 12
+  },
+  {
+   "id": "prediction-market-backend/src/admin/admin.service.ts",
+   "repo": "api",
+   "module": "api/admin",
+   "summary": "Market-maker risk across all funded, unsettled markets.",
+   "exports": [
+    "AdminService"
+   ],
+   "lines": 194
+  },
+  {
+   "id": "prediction-market-backend/src/app.module.ts",
+   "repo": "api",
+   "module": "api/(root)",
+   "summary": "Liveness + DB readiness (used by Docker health checks).",
+   "exports": [
+    "AppModule"
+   ],
+   "lines": 55
+  },
+  {
+   "id": "prediction-market-backend/src/auth/auth.controller.ts",
+   "repo": "api",
+   "module": "api/auth",
+   "summary": "",
+   "exports": [
+    "AuthController"
+   ],
+   "lines": 98
+  },
+  {
+   "id": "prediction-market-backend/src/auth/auth.guard.ts",
+   "repo": "api",
+   "module": "api/auth",
+   "summary": "Require a logged-in user, optionally with a permission.",
+   "exports": [
+    "AuthGuard",
+    "Auth",
+    "CurrentUser",
+    "ClientIp"
+   ],
+   "lines": 34
+  },
+  {
+   "id": "prediction-market-backend/src/auth/auth.module.ts",
+   "repo": "api",
+   "module": "api/auth",
+   "summary": "",
+   "exports": [
+    "AuthModule"
+   ],
+   "lines": 18
+  },
+  {
+   "id": "prediction-market-backend/src/auth/auth.service.ts",
+   "repo": "api",
+   "module": "api/auth",
+   "summary": "virtual issuance from the promotions account (its negative balance = total bonuses issued)",
+   "exports": [
+    "registerSchema",
+    "loginSchema",
+    "AuthService",
+    "ageOn"
+   ],
+   "lines": 168
+  },
+  {
+   "id": "prediction-market-backend/src/auth/auth.types.ts",
+   "repo": "api",
+   "module": "api/auth",
+   "summary": "What each role is allowed to do. ADMIN implies everything.",
+   "exports": [
+    "AuthUser",
+    "AuthedRequest",
+    "SESSION_COOKIE",
+    "CSRF_COOKIE",
+    "CSRF_HEADER",
+    "PERMISSIONS",
+    "Permission",
+    "can"
+   ],
+   "lines": 38
+  },
+  {
+   "id": "prediction-market-backend/src/auth/session.middleware.ts",
+   "repo": "api",
+   "module": "api/auth",
+   "summary": "1. Resolves the session cookie into req.user. 2. Double-submit CSRF protection: mutating requests must echo the tb_csrf cookie in the X-CSRF-Token header (SameSite=Lax cookies + this header defeat CSRF).",
+   "exports": [
+    "SessionMiddleware"
+   ],
+   "lines": 42
+  },
+  {
+   "id": "prediction-market-backend/src/common/audit.service.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "Append-only audit trail (DB trigger forbids UPDATE/DELETE on AuditLog).",
+   "exports": [
+    "AuditInput",
+    "AuditService"
+   ],
+   "lines": 34
+  },
+  {
+   "id": "prediction-market-backend/src/common/clock.service.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "Single source of \"now\" for business rules (market open/close, dispute windows). In DEMO_MODE an admin can shift it forward to simulate the passage of time.",
+   "exports": [
+    "ClockService"
+   ],
+   "lines": 45
+  },
+  {
+   "id": "prediction-market-backend/src/common/common.module.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "",
+   "exports": [
+    "CommonModule"
+   ],
+   "lines": 12
+  },
+  {
+   "id": "prediction-market-backend/src/common/errors.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "A business-rule violation with a user-facing message.",
+   "exports": [
+    "DomainError",
+    "notFound",
+    "forbidden",
+    "conflict",
+    "AllExceptionsFilter"
+   ],
+   "lines": 40
+  },
+  {
+   "id": "prediction-market-backend/src/common/money.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "",
+   "exports": [
+    "toDec",
+    "money",
+    "shares",
+    "ZERO"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/common/prisma.service.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "Run `fn` in a single atomic DB transaction. Retries on serialization failures / deadlocks, so callers must make `fn` free of external side effects.",
+   "exports": [
+    "Tx",
+    "PrismaService"
+   ],
+   "lines": 44
+  },
+  {
+   "id": "prediction-market-backend/src/common/throttler.guard.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "Rate-limit key = client IP + targeted account (for login/register). Brute force against one account stays capped, while many people behind one NAT (common on mobile networks) are not locked out by each other.",
+   "exports": [
+    "AppThrottlerGuard"
+   ],
+   "lines": 16
+  },
+  {
+   "id": "prediction-market-backend/src/common/validate.ts",
+   "repo": "api",
+   "module": "api/common",
+   "summary": "Decimal string with up to `dp` places — never a JS float.",
+   "exports": [
+    "parse",
+    "decimalString",
+    "idempotencyKey",
+    "rate"
+   ],
+   "lines": 24
+  },
+  {
+   "id": "prediction-market-backend/src/config.ts",
+   "repo": "api",
+   "module": "api/(root)",
+   "summary": "",
+   "exports": [
+    "Config",
+    "config",
+    "blockedCountries"
+   ],
+   "lines": 42
+  },
+  {
+   "id": "prediction-market-backend/src/ledger/ledger.module.ts",
+   "repo": "api",
+   "module": "api/ledger",
+   "summary": "",
+   "exports": [
+    "LedgerModule"
+   ],
+   "lines": 7
+  },
+  {
+   "id": "prediction-market-backend/src/ledger/ledger.service.ts",
+   "repo": "api",
+   "module": "api/ledger",
+   "summary": "Double-entry ledger. All balance changes go through `post`, inside the caller's transaction. Accounts are row-locked (in id order, to avoid deadlocks) before any balance is read or written.",
+   "exports": [
+    "LineInput",
+    "PostInput",
+    "LedgerService"
+   ],
+   "lines": 142
+  },
+  {
+   "id": "prediction-market-backend/src/lmsr/lmsr.ts",
+   "repo": "api",
+   "module": "api/lmsr",
+   "summary": "Logarithmic Market Scoring Rule (LMSR) for binary YES/NO markets. C(qY, qN) = b · ln(e^(qY/b) + e^(qN/b)) p_YES = ∂C/∂qY = e^(qY/b) / (e^(qY/b) + e^(qN/b)) = 1 / (1 + e^((qN − qY)/b)) Pure functions on decimal.js values ",
+   "exports": [
+    "D",
+    "Dec",
+    "DecLike",
+    "SHARE_DP",
+    "MONEY_DP",
+    "dec",
+    "Side",
+    "LmsrParams",
+    "MarketState",
+    "logSumExp",
+    "cost",
+    "priceYes",
+    "prices",
+    "maxLoss",
+    "costToBuy",
+    "proceedsFromSell",
+    "sharesForAmount",
+    "sharesToSellForAmount",
+    "floorTo",
+    "ceilTo",
+    "PRICE_FLOOR",
+    "clampPrice"
+   ],
+   "lines": 144
+  },
+  {
+   "id": "prediction-market-backend/src/lmsr/quote.ts",
+   "repo": "api",
+   "module": "api/lmsr",
+   "summary": "Turns an LMSR state + a trade request into an exact, rounded execution plan. Rounding always favours the market's solvency (never the trader, never the house's books in a way that could break the escrow invariant): - buy",
+   "exports": [
+    "TradeSide",
+    "QuoteMode",
+    "QuoteRequest",
+    "Quote",
+    "QuoteError",
+    "MIN_TRADE",
+    "MIN_SHARES",
+    "quote",
+    "serializeQuote"
+   ],
+   "lines": 132
+  },
+  {
+   "id": "prediction-market-backend/src/main.ts",
+   "repo": "api",
+   "module": "api/(root)",
+   "summary": "",
+   "exports": [
+    "createApp"
+   ],
+   "lines": 30
+  },
+  {
+   "id": "prediction-market-backend/src/markets/markets.controller.ts",
+   "repo": "api",
+   "module": "api/markets",
+   "summary": "Everything the homepage needs in one request.",
+   "exports": [
+    "MarketsController"
+   ],
+   "lines": 50
+  },
+  {
+   "id": "prediction-market-backend/src/markets/markets.module.ts",
+   "repo": "api",
+   "module": "api/markets",
+   "summary": "",
+   "exports": [
+    "MarketsModule"
+   ],
+   "lines": 7
+  },
+  {
+   "id": "prediction-market-backend/src/markets/markets.service.ts",
+   "repo": "api",
+   "module": "api/markets",
+   "summary": "Market-maker economics for one market (all derived from authoritative state).",
+   "exports": [
+    "CATEGORIES",
+    "createMarketSchema",
+    "updateMarketSchema",
+    "stateOf",
+    "MarketsService"
+   ],
+   "lines": 428
+  },
+  {
+   "id": "prediction-market-backend/src/notifications/notifications.controller.ts",
+   "repo": "api",
+   "module": "api/notifications",
+   "summary": "",
+   "exports": [
+    "NotificationsController"
+   ],
+   "lines": 23
+  },
+  {
+   "id": "prediction-market-backend/src/notifications/notifications.module.ts",
+   "repo": "api",
+   "module": "api/notifications",
+   "summary": "",
+   "exports": [
+    "NotificationsModule"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/notifications/notifications.service.ts",
+   "repo": "api",
+   "module": "api/notifications",
+   "summary": "Push already-committed notifications to sockets (used after a transaction).",
+   "exports": [
+    "NotifyInput",
+    "NotificationsService"
+   ],
+   "lines": 54
+  },
+  {
+   "id": "prediction-market-backend/src/payments/payment-provider.ts",
+   "repo": "api",
+   "module": "api/payments",
+   "summary": "Payment provider abstraction. Only a SIMULATED provider ships with Tinbit. Real-money providers (e.g. a licensed Ethiopian mobile-money or bank gateway) must implement this interface AND pass legal/regulatory approval + ",
+   "exports": [
+    "ProviderDepositInit",
+    "ProviderWebhookEvent",
+    "PaymentProvider",
+    "SimulatedPaymentProvider",
+    "DisabledPaymentProvider",
+    "screenPayment"
+   ],
+   "lines": 68
+  },
+  {
+   "id": "prediction-market-backend/src/portfolio/portfolio.controller.ts",
+   "repo": "api",
+   "module": "api/portfolio",
+   "summary": "",
+   "exports": [
+    "PortfolioController"
+   ],
+   "lines": 23
+  },
+  {
+   "id": "prediction-market-backend/src/portfolio/portfolio.module.ts",
+   "repo": "api",
+   "module": "api/portfolio",
+   "summary": "",
+   "exports": [
+    "PortfolioModule"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/portfolio/portfolio.service.ts",
+   "repo": "api",
+   "module": "api/portfolio",
+   "summary": "Mark-to-market a position at the current marginal price (or the final outcome).",
+   "exports": [
+    "PortfolioService"
+   ],
+   "lines": 101
+  },
+  {
+   "id": "prediction-market-backend/src/realtime/cookie.ts",
+   "repo": "api",
+   "module": "api/realtime",
+   "summary": "",
+   "exports": [
+    "parse"
+   ],
+   "lines": 11
+  },
+  {
+   "id": "prediction-market-backend/src/realtime/realtime.gateway.ts",
+   "repo": "api",
+   "module": "api/realtime",
+   "summary": "Live updates over Socket.IO. The database stays authoritative: every event is emitted only AFTER the transaction that produced it has committed, and clients re-fetch from the API when they (re)connect. rooms: market:<id>",
+   "exports": [
+    "RealtimeGateway"
+   ],
+   "lines": 57
+  },
+  {
+   "id": "prediction-market-backend/src/realtime/realtime.module.ts",
+   "repo": "api",
+   "module": "api/realtime",
+   "summary": "",
+   "exports": [
+    "RealtimeModule"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/resolution/resolution.controller.ts",
+   "repo": "api",
+   "module": "api/resolution",
+   "summary": "Any trader in the market can dispute a confirmed result during the dispute window.",
+   "exports": [
+    "ResolutionController"
+   ],
+   "lines": 20
+  },
+  {
+   "id": "prediction-market-backend/src/resolution/resolution.module.ts",
+   "repo": "api",
+   "module": "api/resolution",
+   "summary": "",
+   "exports": [
+    "ResolutionModule"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "repo": "api",
+   "module": "api/resolution",
+   "summary": "Resolution workflow: propose (resolver / automated provider) → review by a DIFFERENT reviewer → dispute window → (optional) disputes resolved by a reviewer/admin → finalize → settle (exactly once).",
+   "exports": [
+    "ProposeInput",
+    "ResolutionService"
+   ],
+   "lines": 307
+  },
+  {
+   "id": "prediction-market-backend/src/scheduler/scheduler.module.ts",
+   "repo": "api",
+   "module": "api/scheduler",
+   "summary": "",
+   "exports": [
+    "SchedulerModule"
+   ],
+   "lines": 9
+  },
+  {
+   "id": "prediction-market-backend/src/scheduler/scheduler.service.ts",
+   "repo": "api",
+   "module": "api/scheduler",
+   "summary": "In-process scheduler (instead of BullMQ+Redis) — one less service to run while Tinbit is small. Every job is idempotent and DB-locked, so running two API instances is still safe; move to a queue when there are many insta",
+   "exports": [
+    "SchedulerService"
+   ],
+   "lines": 51
+  },
+  {
+   "id": "prediction-market-backend/src/sports/api-football.provider.ts",
+   "repo": "api",
+   "module": "api/sports",
+   "summary": "Adapter for API-Football (api-sports.io). Requires API_FOOTBALL_KEY. NOT exercised in CI (no credentials). League ids should be confirmed against the provider's /leagues endpoint before going live — especially the Ethiop",
+   "exports": [
+    "ApiFootballProvider"
+   ],
+   "lines": 60
+  },
+  {
+   "id": "prediction-market-backend/src/sports/mock.provider.ts",
+   "repo": "api",
+   "module": "api/sports",
+   "summary": "DEMONSTRATION DATA ONLY. These fixtures are invented and are not real scheduled matches. Results are set by an administrator in demo mode (Admin → Sports → \"Set demo result\").",
+   "exports": [
+    "MockFootballProvider"
+   ],
+   "lines": 43
+  },
+  {
+   "id": "prediction-market-backend/src/sports/provider.ts",
+   "repo": "api",
+   "module": "api/sports",
+   "summary": "Normalised fixture shape every football data adapter must return.",
+   "exports": [
+    "ProviderFixture",
+    "League",
+    "LEAGUES",
+    "FootballProvider"
+   ],
+   "lines": 30
+  },
+  {
+   "id": "prediction-market-backend/src/sports/sports.module.ts",
+   "repo": "api",
+   "module": "api/sports",
+   "summary": "",
+   "exports": [
+    "SportsModule"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/sports/sports.service.ts",
+   "repo": "api",
+   "module": "api/sports",
+   "summary": "Create the standard football markets for a fixture. Trading closes at kickoff (no in-play).",
+   "exports": [
+    "FOOTBALL_TYPES",
+    "footballOutcome",
+    "SportsService"
+   ],
+   "lines": 199
+  },
+  {
+   "id": "prediction-market-backend/src/trading/trading.controller.ts",
+   "repo": "api",
+   "module": "api/trading",
+   "summary": "",
+   "exports": [
+    "TradingController"
+   ],
+   "lines": 27
+  },
+  {
+   "id": "prediction-market-backend/src/trading/trading.module.ts",
+   "repo": "api",
+   "module": "api/trading",
+   "summary": "",
+   "exports": [
+    "TradingModule"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/src/trading/trading.service.ts",
+   "repo": "api",
+   "module": "api/trading",
+   "summary": "Slippage guard: reject if the YES price moved beyond this many probability points from the preview (default 5 pts).",
+   "exports": [
+    "quoteSchema",
+    "tradeSchema",
+    "TradeInput",
+    "TradingService"
+   ],
+   "lines": 239
+  },
+  {
+   "id": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "repo": "api",
+   "module": "api/wallet",
+   "summary": "Future: real provider confirmations land here (signature verified by the provider adapter).",
+   "exports": [
+    "WalletController"
+   ],
+   "lines": 51
+  },
+  {
+   "id": "prediction-market-backend/src/wallet/wallet.module.ts",
+   "repo": "api",
+   "module": "api/wallet",
+   "summary": "",
+   "exports": [
+    "WalletModule"
+   ],
+   "lines": 7
+  },
+  {
+   "id": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "repo": "api",
+   "module": "api/wallet",
+   "summary": "Simulated deposit: intent → provider → confirmation (as a webhook would) → ledger credit.",
+   "exports": [
+    "WalletService"
+   ],
+   "lines": 173
+  },
+  {
+   "id": "prediction-market-backend/test/helpers.ts",
+   "repo": "api-test",
+   "module": "api-test/(root)",
+   "summary": "Resolve a market through the full workflow (propose → review → window → finalize).",
+   "exports": [
+    "Ctx",
+    "setup",
+    "reset",
+    "user",
+    "market",
+    "balance",
+    "sys",
+    "escrow",
+    "key",
+    "buy",
+    "sell",
+    "resolve",
+    "agent"
+   ],
+   "lines": 146
+  },
+  {
+   "id": "prediction-market-backend/test/integration/api.spec.ts",
+   "repo": "api-test",
+   "module": "api-test/integration",
+   "summary": "",
+   "exports": [],
+   "lines": 154
+  },
+  {
+   "id": "prediction-market-backend/test/integration/critical-scenario.spec.ts",
+   "repo": "api-test",
+   "module": "api-test/integration",
+   "summary": "The acceptance scenario from the spec: 50/50 market (b = 1000, no fee) → User A spends 1,000 on YES → User B spends 20 on NO. Every expected number is derived here from the LMSR closed form, independently of the engine, ",
+   "exports": [],
+   "lines": 119
+  },
+  {
+   "id": "prediction-market-backend/test/integration/resolution.spec.ts",
+   "repo": "api-test",
+   "module": "api-test/integration",
+   "summary": "no market can be settled twice",
+   "exports": [],
+   "lines": 182
+  },
+  {
+   "id": "prediction-market-backend/test/integration/trading.spec.ts",
+   "repo": "api-test",
+   "module": "api-test/integration",
+   "summary": "round trip loses only fees (+ rounding dust), never gains",
+   "exports": [],
+   "lines": 166
+  },
+  {
+   "id": "prediction-market-backend/test/setup-env.ts",
+   "repo": "api-test",
+   "module": "api-test/(root)",
+   "summary": "",
+   "exports": [],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-backend/test/unit/lmsr.spec.ts",
+   "repo": "api-test",
+   "module": "api-test/unit",
+   "summary": "simulate a whale buying almost all YES: loss approaches but never exceeds the bound",
+   "exports": [],
+   "lines": 136
+  },
+  {
+   "id": "prediction-market-backend/prisma/seed.ts",
+   "repo": "api-db",
+   "module": "api-db/(root)",
+   "summary": "Seed: system accounts, staff/demo users and DEMONSTRATION markets. Everything below is invented demo data and is labelled isDemo=true. Demo trading history is produced by running real trades through the TradingService (w",
+   "exports": [],
+   "lines": 156
+  },
+  {
+   "id": "prediction-market-frontend/src/app/admin/markets/[id]/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "AdminMarket"
+   ],
+   "lines": 89
+  },
+  {
+   "id": "prediction-market-frontend/src/app/admin/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "AdminPage"
+   ],
+   "lines": 354
+  },
+  {
+   "id": "prediction-market-frontend/src/app/how-it-works/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "Float math is fine here: this is an illustration only. Real trades are priced on the server",
+   "exports": [
+    "HowItWorks"
+   ],
+   "lines": 96
+  },
+  {
+   "id": "prediction-market-frontend/src/app/layout.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "metadata",
+    "viewport",
+    "RootLayout"
+   ],
+   "lines": 34
+  },
+  {
+   "id": "prediction-market-frontend/src/app/login/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "LoginPage"
+   ],
+   "lines": 51
+  },
+  {
+   "id": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "live: any trade/status change on this market → refetch authoritative state",
+   "exports": [
+    "MarketPage"
+   ],
+   "lines": 199
+  },
+  {
+   "id": "prediction-market-frontend/src/app/markets/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "MarketsPage"
+   ],
+   "lines": 46
+  },
+  {
+   "id": "prediction-market-frontend/src/app/notifications/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "NotificationsPage"
+   ],
+   "lines": 43
+  },
+  {
+   "id": "prediction-market-frontend/src/app/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "HomePage"
+   ],
+   "lines": 54
+  },
+  {
+   "id": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "PortfolioPage"
+   ],
+   "lines": 193
+  },
+  {
+   "id": "prediction-market-frontend/src/app/providers.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "Providers"
+   ],
+   "lines": 22
+  },
+  {
+   "id": "prediction-market-frontend/src/app/register/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "RegisterPage"
+   ],
+   "lines": 57
+  },
+  {
+   "id": "prediction-market-frontend/src/app/settings/page.tsx",
+   "repo": "web",
+   "module": "web/app",
+   "summary": "",
+   "exports": [
+    "SettingsPage"
+   ],
+   "lines": 55
+  },
+  {
+   "id": "prediction-market-frontend/src/components/admin/create-market.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "CreateMarket"
+   ],
+   "lines": 87
+  },
+  {
+   "id": "prediction-market-frontend/src/components/admin/shared.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "useAction",
+    "Table",
+    "Td",
+    "KPI"
+   ],
+   "lines": 46
+  },
+  {
+   "id": "prediction-market-frontend/src/components/auth-shell.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "AuthShell"
+   ],
+   "lines": 14
+  },
+  {
+   "id": "prediction-market-frontend/src/components/categories.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "CATS",
+    "CategoryChips"
+   ],
+   "lines": 26
+  },
+  {
+   "id": "prediction-market-frontend/src/components/chart.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "Lightweight SVG line/area chart with hover crosshair (no chart library = small bundle).",
+   "exports": [
+    "Pt",
+    "LineChart"
+   ],
+   "lines": 78
+  },
+  {
+   "id": "prediction-market-frontend/src/components/footer.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "Footer"
+   ],
+   "lines": 20
+  },
+  {
+   "id": "prediction-market-frontend/src/components/logo.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "Logo"
+   ],
+   "lines": 14
+  },
+  {
+   "id": "prediction-market-frontend/src/components/market-card.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "MarketCard",
+    "MarketCardSkeleton"
+   ],
+   "lines": 68
+  },
+  {
+   "id": "prediction-market-frontend/src/components/nav.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "Nav"
+   ],
+   "lines": 124
+  },
+  {
+   "id": "prediction-market-frontend/src/components/section.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "Section"
+   ],
+   "lines": 21
+  },
+  {
+   "id": "prediction-market-frontend/src/components/status-badge.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "StatusBadge"
+   ],
+   "lines": 8
+  },
+  {
+   "id": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "new idempotency key whenever the intended trade changes",
+   "exports": [
+    "TradePanel"
+   ],
+   "lines": 224
+  },
+  {
+   "id": "prediction-market-frontend/src/components/ui/primitives.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "Button",
+    "Input",
+    "Textarea",
+    "Select",
+    "Label",
+    "Card",
+    "Badge",
+    "Tabs",
+    "Stat",
+    "Skeleton",
+    "Empty",
+    "ErrorText",
+    "Pnl"
+   ],
+   "lines": 139
+  },
+  {
+   "id": "prediction-market-frontend/src/components/ui/toast.tsx",
+   "repo": "web",
+   "module": "web/components",
+   "summary": "",
+   "exports": [
+    "ToastProvider",
+    "useToast"
+   ],
+   "lines": 30
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/api.ts",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "",
+   "exports": [
+    "ApiError",
+    "api",
+    "fetcher"
+   ],
+   "lines": 37
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/format.ts",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "",
+   "exports": [
+    "birr",
+    "pct",
+    "cents",
+    "num",
+    "signed",
+    "timeLeft",
+    "ago",
+    "date",
+    "CATEGORY_LABEL"
+   ],
+   "lines": 42
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/i18n.tsx",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "Pick the Amharic text when available and selected.",
+   "exports": [
+    "Locale",
+    "I18nProvider",
+    "useI18n",
+    "useLocalized"
+   ],
+   "lines": 86
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/realtime.tsx",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "One Socket.IO connection per tab. Events are hints: on every event we revalidate the relevant SWR keys so the API (database) stays the source of truth.",
+   "exports": [
+    "RealtimeProvider",
+    "useSocketEvent",
+    "useLivePrice"
+   ],
+   "lines": 58
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/session.tsx",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "",
+   "exports": [
+    "useMe"
+   ],
+   "lines": 23
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/types.ts",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "",
+   "exports": [
+    "Status",
+    "Market",
+    "Liquidity",
+    "TradeRow",
+    "Proposal",
+    "MarketDetail",
+    "Me",
+    "Quote",
+    "PositionView",
+    "Portfolio"
+   ],
+   "lines": 145
+  },
+  {
+   "id": "prediction-market-frontend/src/lib/utils.ts",
+   "repo": "web",
+   "module": "web/lib",
+   "summary": "",
+   "exports": [
+    "cn",
+    "uid"
+   ],
+   "lines": 5
+  }
+ ],
+ "edges": [
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/admin/admin.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/sports/sports.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.controller.ts",
+   "to": "prediction-market-backend/src/scheduler/scheduler.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/admin/admin.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/admin/admin.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/sports/sports.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.module.ts",
+   "to": "prediction-market-backend/src/scheduler/scheduler.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/admin/admin.service.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/common/throttler.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/common/common.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/auth/auth.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/portfolio/portfolio.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/trading/trading.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/sports/sports.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/scheduler/scheduler.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/admin/admin.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/app.module.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.controller.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.guard.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.guard.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.guard.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.module.ts",
+   "to": "prediction-market-backend/src/auth/auth.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.module.ts",
+   "to": "prediction-market-backend/src/auth/auth.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.module.ts",
+   "to": "prediction-market-backend/src/auth/session.middleware.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.module.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/auth.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/session.middleware.ts",
+   "to": "prediction-market-backend/src/auth/auth.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/session.middleware.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/auth/session.middleware.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/audit.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/clock.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/clock.service.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/clock.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/common.module.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/common.module.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/common.module.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/money.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/common/validate.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/ledger/ledger.module.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/ledger/ledger.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/ledger/ledger.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/ledger/ledger.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/lmsr/quote.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/main.ts",
+   "to": "prediction-market-backend/src/app.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/main.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/main.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.controller.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.gateway.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/markets/markets.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.controller.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.module.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.module.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.service.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.gateway.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/notifications/notifications.service.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.gateway.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.controller.ts",
+   "to": "prediction-market-backend/src/portfolio/portfolio.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.module.ts",
+   "to": "prediction-market-backend/src/portfolio/portfolio.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.module.ts",
+   "to": "prediction-market-backend/src/portfolio/portfolio.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/portfolio/portfolio.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/realtime/realtime.gateway.ts",
+   "to": "prediction-market-backend/src/realtime/cookie.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/realtime/realtime.gateway.ts",
+   "to": "prediction-market-backend/src/auth/auth.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/realtime/realtime.gateway.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/realtime/realtime.gateway.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/realtime/realtime.module.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.gateway.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/realtime/realtime.module.ts",
+   "to": "prediction-market-backend/src/auth/auth.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.controller.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.module.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.module.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.gateway.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/resolution/resolution.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.module.ts",
+   "to": "prediction-market-backend/src/scheduler/scheduler.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.module.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.module.ts",
+   "to": "prediction-market-backend/src/sports/sports.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.service.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.service.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.service.ts",
+   "to": "prediction-market-backend/src/sports/sports.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/scheduler/scheduler.service.ts",
+   "to": "prediction-market-backend/src/portfolio/portfolio.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/api-football.provider.ts",
+   "to": "prediction-market-backend/src/sports/provider.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/mock.provider.ts",
+   "to": "prediction-market-backend/src/sports/provider.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.module.ts",
+   "to": "prediction-market-backend/src/sports/sports.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.module.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/sports/provider.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/sports/mock.provider.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/sports/sports.service.ts",
+   "to": "prediction-market-backend/src/sports/api-football.provider.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.controller.ts",
+   "to": "prediction-market-backend/src/trading/trading.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.module.ts",
+   "to": "prediction-market-backend/src/trading/trading.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.module.ts",
+   "to": "prediction-market-backend/src/trading/trading.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.module.ts",
+   "to": "prediction-market-backend/src/markets/markets.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/realtime/realtime.gateway.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/lmsr/quote.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/trading/trading.service.ts",
+   "to": "prediction-market-backend/src/portfolio/portfolio.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.guard.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "to": "prediction-market-backend/src/auth/auth.types.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "to": "prediction-market-backend/src/common/validate.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.controller.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.module.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.module.ts",
+   "to": "prediction-market-backend/src/wallet/wallet.controller.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/common/audit.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/common/errors.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/common/money.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/payments/payment-provider.ts"
+  },
+  {
+   "from": "prediction-market-backend/src/wallet/wallet.service.ts",
+   "to": "prediction-market-backend/src/notifications/notifications.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/main.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/auth/auth.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/trading/trading.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/resolution/resolution.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/helpers.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/api.spec.ts",
+   "to": "prediction-market-backend/test/helpers.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/api.spec.ts",
+   "to": "prediction-market-backend/src/config.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/critical-scenario.spec.ts",
+   "to": "prediction-market-backend/test/helpers.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/critical-scenario.spec.ts",
+   "to": "prediction-market-backend/test/helpers.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/critical-scenario.spec.ts",
+   "to": "prediction-market-backend/src/admin/admin.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/critical-scenario.spec.ts",
+   "to": "prediction-market-backend/test/helpers.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/resolution.spec.ts",
+   "to": "prediction-market-backend/test/helpers.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/resolution.spec.ts",
+   "to": "prediction-market-backend/src/admin/admin.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/resolution.spec.ts",
+   "to": "prediction-market-backend/src/sports/sports.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/trading.spec.ts",
+   "to": "prediction-market-backend/test/helpers.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/integration/trading.spec.ts",
+   "to": "prediction-market-backend/src/admin/admin.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/unit/lmsr.spec.ts",
+   "to": "prediction-market-backend/src/lmsr/lmsr.ts"
+  },
+  {
+   "from": "prediction-market-backend/test/unit/lmsr.spec.ts",
+   "to": "prediction-market-backend/src/lmsr/quote.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/app.module.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/auth/auth.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/ledger/ledger.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/markets/markets.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/trading/trading.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/sports/sports.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/common/clock.service.ts"
+  },
+  {
+   "from": "prediction-market-backend/prisma/seed.ts",
+   "to": "prediction-market-backend/src/common/prisma.service.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/markets/[id]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/markets/[id]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/markets/[id]/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/markets/[id]/page.tsx",
+   "to": "prediction-market-frontend/src/components/admin/shared.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/markets/[id]/page.tsx",
+   "to": "prediction-market-frontend/src/components/status-badge.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/components/admin/shared.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/components/admin/create-market.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/admin/page.tsx",
+   "to": "prediction-market-frontend/src/components/status-badge.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/how-it-works/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/layout.tsx",
+   "to": "prediction-market-frontend/src/app/providers.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/layout.tsx",
+   "to": "prediction-market-frontend/src/components/nav.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/layout.tsx",
+   "to": "prediction-market-frontend/src/components/footer.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/login/page.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/login/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/login/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/login/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/login/page.tsx",
+   "to": "prediction-market-frontend/src/components/auth-shell.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/realtime.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/components/chart.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/components/trade-panel.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/components/market-card.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/[slug]/page.tsx",
+   "to": "prediction-market-frontend/src/components/status-badge.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/page.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/page.tsx",
+   "to": "prediction-market-frontend/src/components/market-card.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/page.tsx",
+   "to": "prediction-market-frontend/src/components/categories.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/markets/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/notifications/page.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/notifications/page.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/notifications/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/notifications/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/notifications/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/page.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/page.tsx",
+   "to": "prediction-market-frontend/src/components/section.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/page.tsx",
+   "to": "prediction-market-frontend/src/components/categories.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/page.tsx",
+   "to": "prediction-market-frontend/src/components/market-card.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/components/chart.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/portfolio/page.tsx",
+   "to": "prediction-market-frontend/src/components/status-badge.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/providers.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/providers.tsx",
+   "to": "prediction-market-frontend/src/lib/realtime.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/providers.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/providers.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/register/page.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/register/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/register/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/register/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/register/page.tsx",
+   "to": "prediction-market-frontend/src/components/auth-shell.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/settings/page.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/settings/page.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/settings/page.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/settings/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/app/settings/page.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/create-market.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/create-market.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/create-market.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/create-market.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/shared.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/shared.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/admin/shared.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/auth-shell.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/categories.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/categories.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/categories.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/footer.tsx",
+   "to": "prediction-market-frontend/src/components/logo.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/market-card.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/market-card.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/market-card.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/market-card.tsx",
+   "to": "prediction-market-frontend/src/lib/realtime.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/market-card.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/market-card.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/nav.tsx",
+   "to": "prediction-market-frontend/src/components/logo.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/nav.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/nav.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/nav.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/nav.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/section.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/section.tsx",
+   "to": "prediction-market-frontend/src/components/market-card.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/status-badge.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/lib/session.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/lib/i18n.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/lib/format.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/components/ui/primitives.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/trade-panel.tsx",
+   "to": "prediction-market-frontend/src/components/ui/toast.tsx"
+  },
+  {
+   "from": "prediction-market-frontend/src/components/ui/primitives.tsx",
+   "to": "prediction-market-frontend/src/lib/utils.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/lib/session.tsx",
+   "to": "prediction-market-frontend/src/lib/api.ts"
+  },
+  {
+   "from": "prediction-market-frontend/src/lib/session.tsx",
+   "to": "prediction-market-frontend/src/lib/types.ts"
+  }
+ ],
+ "modules": [
+  {
+   "edge": "api/admin→api/auth",
+   "imports": 2
+  },
+  {
+   "edge": "api/admin→api/common",
+   "imports": 7
+  },
+  {
+   "edge": "api/admin→api/markets",
+   "imports": 3
+  },
+  {
+   "edge": "api/admin→api/resolution",
+   "imports": 2
+  },
+  {
+   "edge": "api/admin→api/sports",
+   "imports": 2
+  },
+  {
+   "edge": "api/admin→api/wallet",
+   "imports": 2
+  },
+  {
+   "edge": "api/admin→api/scheduler",
+   "imports": 2
+  },
+  {
+   "edge": "api/admin→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/admin→api/notifications",
+   "imports": 1
+  },
+  {
+   "edge": "api/admin→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/admin→api/(root)",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/common",
+   "imports": 4
+  },
+  {
+   "edge": "api/(root)→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/auth",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/realtime",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/notifications",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/wallet",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/markets",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/portfolio",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/trading",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/resolution",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/sports",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/scheduler",
+   "imports": 1
+  },
+  {
+   "edge": "api/(root)→api/admin",
+   "imports": 1
+  },
+  {
+   "edge": "api/auth→api/common",
+   "imports": 9
+  },
+  {
+   "edge": "api/auth→api/(root)",
+   "imports": 4
+  },
+  {
+   "edge": "api/auth→api/wallet",
+   "imports": 2
+  },
+  {
+   "edge": "api/auth→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/common→api/(root)",
+   "imports": 1
+  },
+  {
+   "edge": "api/common→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/ledger→api/common",
+   "imports": 2
+  },
+  {
+   "edge": "api/ledger→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/markets→api/common",
+   "imports": 5
+  },
+  {
+   "edge": "api/markets→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/markets→api/realtime",
+   "imports": 1
+  },
+  {
+   "edge": "api/markets→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/notifications→api/auth",
+   "imports": 2
+  },
+  {
+   "edge": "api/notifications→api/common",
+   "imports": 2
+  },
+  {
+   "edge": "api/notifications→api/realtime",
+   "imports": 2
+  },
+  {
+   "edge": "api/portfolio→api/auth",
+   "imports": 2
+  },
+  {
+   "edge": "api/portfolio→api/common",
+   "imports": 3
+  },
+  {
+   "edge": "api/portfolio→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/realtime→api/auth",
+   "imports": 3
+  },
+  {
+   "edge": "api/realtime→api/(root)",
+   "imports": 1
+  },
+  {
+   "edge": "api/resolution→api/auth",
+   "imports": 2
+  },
+  {
+   "edge": "api/resolution→api/common",
+   "imports": 6
+  },
+  {
+   "edge": "api/resolution→api/markets",
+   "imports": 2
+  },
+  {
+   "edge": "api/resolution→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/resolution→api/notifications",
+   "imports": 1
+  },
+  {
+   "edge": "api/resolution→api/realtime",
+   "imports": 1
+  },
+  {
+   "edge": "api/resolution→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/scheduler→api/markets",
+   "imports": 2
+  },
+  {
+   "edge": "api/scheduler→api/resolution",
+   "imports": 2
+  },
+  {
+   "edge": "api/scheduler→api/sports",
+   "imports": 2
+  },
+  {
+   "edge": "api/scheduler→api/portfolio",
+   "imports": 1
+  },
+  {
+   "edge": "api/sports→api/markets",
+   "imports": 2
+  },
+  {
+   "edge": "api/sports→api/resolution",
+   "imports": 2
+  },
+  {
+   "edge": "api/sports→api/common",
+   "imports": 4
+  },
+  {
+   "edge": "api/sports→api/(root)",
+   "imports": 1
+  },
+  {
+   "edge": "api/trading→api/common",
+   "imports": 7
+  },
+  {
+   "edge": "api/trading→api/auth",
+   "imports": 2
+  },
+  {
+   "edge": "api/trading→api/markets",
+   "imports": 2
+  },
+  {
+   "edge": "api/trading→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/trading→api/realtime",
+   "imports": 1
+  },
+  {
+   "edge": "api/trading→api/lmsr",
+   "imports": 2
+  },
+  {
+   "edge": "api/trading→api/portfolio",
+   "imports": 1
+  },
+  {
+   "edge": "api/wallet→api/common",
+   "imports": 7
+  },
+  {
+   "edge": "api/wallet→api/auth",
+   "imports": 2
+  },
+  {
+   "edge": "api/wallet→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api/wallet→api/(root)",
+   "imports": 1
+  },
+  {
+   "edge": "api/wallet→api/lmsr",
+   "imports": 1
+  },
+  {
+   "edge": "api/wallet→api/payments",
+   "imports": 1
+  },
+  {
+   "edge": "api/wallet→api/notifications",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/(root)",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/auth",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/ledger",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/markets",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/trading",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/sports",
+   "imports": 1
+  },
+  {
+   "edge": "api-db/(root)→api/common",
+   "imports": 2
+  },
+  {
+   "edge": "web/app→web/lib",
+   "imports": 38
+  },
+  {
+   "edge": "web/app→web/components",
+   "imports": 34
+  },
+  {
+   "edge": "web/components→web/lib",
+   "imports": 24
+  }
+ ]
+}

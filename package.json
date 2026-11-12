@@ -16,7 +16,10 @@
     "test": "jest --runInBand",
     "test:unit": "jest --runInBand test/unit",
     "test:int": "jest --runInBand test/integration",
-    "scenario": "node --env-file-if-exists=.env -r ts-node/register/transpile-only scripts/critical-scenario.ts"
+    "scenario": "node --env-file-if-exists=.env -r ts-node/register/transpile-only scripts/critical-scenario.ts",
+    "dev:all": "sh scripts/dev-all.sh",
+    "backup": "sh scripts/backup.sh",
+    "codemap": "node scripts/codemap.mjs"
   },
   "prisma": {
     "seed": "node --env-file-if-exists=.env -r ts-node/register/transpile-only prisma/seed.ts"
