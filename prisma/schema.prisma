@@ -1,0 +1,501 @@
+// Tinbit — prediction market schema.
+//
+// Money:  Decimal(20,2)  virtual birr (ETB). Never JS floats.
+// Shares: Decimal(24,6)  outcome shares; each pays 1 birr if its outcome wins.
+//
+// Accounting is double-entry: every movement of money is a JournalEntry whose
+// JournalLines sum to zero. Account.balance is a cached running total that is
+// only ever changed inside the same DB transaction that writes the lines.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ───────────────────────────── Users & auth ─────────────────────────────
+
+enum Role {
+  USER
+  RESOLVER
+  REVIEWER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String    @unique
+  passwordHash  String
+  displayName   String
+  roles         Role[]    @default([USER])
+  locale        String    @default("en")
+  country       String
+  dateOfBirth   DateTime  @db.Date
+  totpSecret    String?
+  totpEnabled   Boolean   @default(false)
+  isSuspended   Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  lastLoginAt   DateTime?
+
+  sessions      Session[]
+  accounts      Account[]
+  positions     Position[]
+  trades        Trade[]
+  notifications Notification[]
+  snapshots     PortfolioSnapshot[]
+  disputes      Dispute[]
+  payments      PaymentIntent[]
+}
+
+model Session {
+  id                String   @id // sha256(token) — raw token only lives in the cookie
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  expiresAt         DateTime
+  lastSeenAt        DateTime @default(now())
+  ip                String?
+  userAgent         String?
+  twoFactorVerified Boolean  @default(false)
+
+  @@index([userId])
+}
+
+// ───────────────────────────── Ledger ─────────────────────────────
+
+enum AccountType {
+  USER_AVAILABLE   // customer funds, spendable
+  USER_RESERVED    // customer funds held (pending withdrawals, future limit orders)
+  MARKET_ESCROW    // per-market pool: trader cash + market-maker subsidy
+  COMPANY_RESERVE  // operator money used to fund market-maker liquidity
+  FEE_REVENUE      // trading fees earned by the operator
+  PROMOTIONS       // signup bonuses & test-money faucet (virtual issuance)
+  EQUITY           // initial virtual capital issuance (may go negative)
+  PAYMENT_CLEARING // counterparty for deposits/withdrawals (may go negative)
+  ADJUSTMENTS      // counterparty for audited manual adjustments (may go negative)
+}
+
+model Account {
+  id            String        @id @default(cuid())
+  type          AccountType
+  userId        String?
+  user          User?         @relation(fields: [userId], references: [id])
+  marketId      String?
+  market        Market?       @relation(fields: [marketId], references: [id])
+  balance       Decimal       @default(0) @db.Decimal(20, 2)
+  allowNegative Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  lines         JournalLine[]
+
+  @@unique([type, userId, marketId])
+  @@index([userId])
+}
+
+enum EntryKind {
+  GENESIS
+  SIGNUP_BONUS
+  DEPOSIT
+  WITHDRAWAL_HOLD
+  WITHDRAWAL_RELEASE
+  WITHDRAWAL_PAYOUT
+  TRADE_BUY
+  TRADE_SELL
+  LIQUIDITY_FUNDING
+  LIQUIDITY_RETURN
+  SETTLEMENT_PAYOUT
+  CANCELLATION_REFUND
+  ADMIN_ADJUSTMENT
+  RESERVE_TOPUP
+}
+
+model JournalEntry {
+  id          String        @id @default(cuid())
+  kind        EntryKind
+  memo        String
+  createdAt   DateTime      @default(now())
+  actorId     String?
+  marketId    String?
+  referenceId String?       // trade / settlement / payment id
+  lines       JournalLine[]
+
+  @@index([marketId])
+  @@index([referenceId])
+}
+
+model JournalLine {
+  id        String       @id @default(cuid())
+  entryId   String
+  entry     JournalEntry @relation(fields: [entryId], references: [id])
+  accountId String
+  account   Account      @relation(fields: [accountId], references: [id])
+  amount    Decimal      @db.Decimal(20, 2) // + credit to account, − debit from account
+  balanceAfter Decimal   @db.Decimal(20, 2)
+
+  @@index([accountId])
+  @@index([entryId])
+}
+
+// ───────────────────────────── Markets ─────────────────────────────
+
+enum MarketStatus {
+  DRAFT
+  SCHEDULED
+  OPEN
+  CLOSED
+  AWAITING_RESOLUTION
+  DISPUTED
+  RESOLVED
+  CANCELLED
+}
+
+enum Category {
+  ETHIOPIAN_FOOTBALL
+  PREMIER_LEAGUE
+  CHAMPIONS_LEAGUE
+  INTERNATIONAL_FOOTBALL
+  MUSIC
+  TELEVISION
+  ENTERTAINMENT
+  CULTURE
+  OTHER
+}
+
+enum MarketType {
+  BINARY            // generic YES/NO, manually resolved
+  FOOTBALL_HOME_WIN
+  FOOTBALL_AWAY_WIN
+  FOOTBALL_OVER_2_5
+  FOOTBALL_BTTS
+}
+
+enum Outcome {
+  YES
+  NO
+}
+
+enum FinalOutcome {
+  YES
+  NO
+  CANCELLED
+}
+
+enum CancellationPolicy {
+  REFUND_NET_COST // each trader gets back what they net-paid in (capped by escrow, pro-rata)
+  LAST_PRICE      // YES shares pay last pre-close YES price, NO shares pay 1 − that
+}
+
+model Market {
+  id                 String       @id @default(cuid())
+  slug               String       @unique
+  question           String
+  questionAm         String?
+  description        String
+  category           Category
+  type               MarketType   @default(BINARY)
+  yesLabel           String       @default("Yes")
+  noLabel            String       @default("No")
+  imageEmoji         String?
+  isDemo             Boolean      @default(false) // invented/demonstration data
+  featured           Boolean      @default(false)
+
+  opensAt            DateTime
+  closesAt           DateTime
+  resolvesAt         DateTime     // expected resolution date
+
+  status             MarketStatus @default(DRAFT)
+  tradingHalted      Boolean      @default(false)
+  haltReason         String?
+
+  // ── LMSR / liquidity (locked once published) ──
+  initialProbability Decimal      @db.Decimal(8, 6) // YES prior, 0.01..0.99
+  liquidityB         Decimal      @db.Decimal(20, 6)
+  feeBps             Int          @default(100)     // 1% = 100 bps
+  subsidy            Decimal      @default(0) @db.Decimal(20, 2) // MM collateral = ⌈b·ln(1/p_min)⌉
+  riskBudget         Decimal      @db.Decimal(20, 2) // max loss operator accepts on this market
+  maxTradeAmount     Decimal      @default(50000) @db.Decimal(20, 2)
+  liquidityFundedAt  DateTime?
+
+  // net outstanding shares held by traders (sum of positions)
+  yesShares          Decimal      @default(0) @db.Decimal(24, 6)
+  noShares           Decimal      @default(0) @db.Decimal(24, 6)
+  volume             Decimal      @default(0) @db.Decimal(20, 2)
+  tradesCount        Int          @default(0)
+  lastYesPrice       Decimal      @db.Decimal(10, 8) // cache — recomputed from q on every trade
+  closingYesPrice    Decimal?     @db.Decimal(10, 8)
+
+  // ── resolution ──
+  resolutionRules    String
+  sourcePrimary      String
+  sourceBackup       String?
+  cancellationRules  String
+  cancellationPolicy CancellationPolicy @default(REFUND_NET_COST)
+  disputeHours       Int          @default(24)
+  resolvedOutcome    FinalOutcome?
+  resolvedAt         DateTime?
+  settledAt          DateTime?
+
+  fixtureId          String?
+  fixture            Fixture?     @relation(fields: [fixtureId], references: [id])
+
+  createdById        String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  accounts           Account[]
+  trades             Trade[]
+  positions          Position[]
+  prices             PricePoint[]
+  proposals          ResolutionProposal[]
+  settlement         Settlement?
+
+  @@index([status, closesAt])
+  @@index([category])
+}
+
+model PricePoint {
+  id        BigInt   @id @default(autoincrement())
+  marketId  String
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  yesPrice  Decimal  @db.Decimal(10, 8)
+  at        DateTime @default(now())
+
+  @@index([marketId, at])
+}
+
+// ───────────────────────────── Trading ─────────────────────────────
+
+enum TradeSide {
+  BUY
+  SELL
+}
+
+model Trade {
+  id             String    @id @default(cuid())
+  marketId       String
+  market         Market    @relation(fields: [marketId], references: [id])
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  side           TradeSide
+  outcome        Outcome
+  shares         Decimal   @db.Decimal(24, 6)
+  amount         Decimal   @db.Decimal(20, 2) // cash moved to/from the market escrow (excl. fee)
+  fee            Decimal   @db.Decimal(20, 2)
+  avgPrice       Decimal   @db.Decimal(10, 8)
+  yesPriceBefore Decimal   @db.Decimal(10, 8)
+  yesPriceAfter  Decimal   @db.Decimal(10, 8)
+  idempotencyKey String
+  journalEntryId String
+  createdAt      DateTime  @default(now())
+
+  @@unique([userId, idempotencyKey])
+  @@index([marketId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model Position {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  marketId      String
+  market        Market   @relation(fields: [marketId], references: [id])
+  yesShares     Decimal  @default(0) @db.Decimal(24, 6)
+  noShares      Decimal  @default(0) @db.Decimal(24, 6)
+  yesCost       Decimal  @default(0) @db.Decimal(20, 6) // cost basis of shares still held
+  noCost        Decimal  @default(0) @db.Decimal(20, 6)
+  realizedPnl   Decimal  @default(0) @db.Decimal(20, 2)
+  netContributed Decimal @default(0) @db.Decimal(20, 2) // Σ buy amount − Σ sell amount (excl. fees)
+  settledPayout Decimal? @db.Decimal(20, 2)
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, marketId])
+  @@index([marketId])
+}
+
+// ───────────────────────────── Resolution ─────────────────────────────
+
+enum ProposalSource {
+  MANUAL
+  AUTOMATED
+}
+
+enum ProposalStatus {
+  PENDING_REVIEW
+  REJECTED
+  CONFIRMED   // reviewer approved; dispute window running
+  DISPUTED
+  OVERTURNED
+  FINALIZED
+}
+
+model ResolutionProposal {
+  id             String         @id @default(cuid())
+  marketId       String
+  market         Market         @relation(fields: [marketId], references: [id])
+  outcome        FinalOutcome
+  source         ProposalSource
+  evidenceUrl    String
+  evidenceNotes  String
+  proposedById   String?
+  reviewedById   String?
+  reviewNote     String?
+  status         ProposalStatus @default(PENDING_REVIEW)
+  createdAt      DateTime       @default(now())
+  reviewedAt     DateTime?
+  disputeEndsAt  DateTime?
+  finalizedAt    DateTime?
+  disputes       Dispute[]
+
+  @@index([marketId])
+  @@index([status])
+}
+
+enum DisputeStatus {
+  OPEN
+  UPHELD    // dispute accepted → proposal overturned
+  REJECTED  // dispute dismissed → proposal stands
+}
+
+model Dispute {
+  id             String             @id @default(cuid())
+  proposalId     String
+  proposal       ResolutionProposal @relation(fields: [proposalId], references: [id])
+  userId         String
+  user           User               @relation(fields: [userId], references: [id])
+  reason         String
+  evidenceUrl    String?
+  status         DisputeStatus      @default(OPEN)
+  resolvedById   String?
+  resolutionNote String?
+  createdAt      DateTime           @default(now())
+  resolvedAt     DateTime?
+
+  @@index([proposalId])
+}
+
+model Settlement {
+  id            String       @id @default(cuid())
+  marketId      String       @unique // a market can only ever be settled once
+  market        Market       @relation(fields: [marketId], references: [id])
+  outcome       FinalOutcome
+  totalPayout   Decimal      @db.Decimal(20, 2)
+  returnedToReserve Decimal  @db.Decimal(20, 2)
+  positions     Int
+  journalEntryId String
+  createdAt     DateTime     @default(now())
+}
+
+// ───────────────────────────── Sports ─────────────────────────────
+
+enum FixtureStatus {
+  SCHEDULED
+  LIVE
+  FINISHED
+  POSTPONED
+  CANCELLED
+  ABANDONED
+}
+
+model Fixture {
+  id           String        @id @default(cuid())
+  provider     String        // "mock" | "api-football" | …
+  externalId   String
+  league       String        // ETH_PL | EPL | UCL | INTL
+  homeTeam     String
+  awayTeam     String
+  kickoffAt    DateTime
+  status       FixtureStatus @default(SCHEDULED)
+  homeGoals    Int?          // regular time (90' + stoppage) only
+  awayGoals    Int?
+  isDemo       Boolean       @default(false)
+  lastSyncedAt DateTime?
+  markets      Market[]
+
+  @@unique([provider, externalId])
+}
+
+// ───────────────────────────── Payments (simulated) ─────────────────────────────
+
+enum PaymentKind {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum PaymentStatus {
+  PENDING
+  REQUIRES_APPROVAL
+  COMPLETED
+  FAILED
+  REJECTED
+  REFUNDED
+}
+
+model PaymentIntent {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id])
+  kind           PaymentKind
+  provider       String
+  amount         Decimal       @db.Decimal(20, 2)
+  status         PaymentStatus @default(PENDING)
+  externalRef    String?       @unique
+  riskFlags      String[]      @default([])
+  idempotencyKey String
+  reviewedById   String?
+  failureReason  String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([userId, idempotencyKey])
+}
+
+// ───────────────────────────── Platform ─────────────────────────────
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model PortfolioSnapshot {
+  id     BigInt   @id @default(autoincrement())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cash   Decimal  @db.Decimal(20, 2)
+  value  Decimal  @db.Decimal(20, 2) // cash + mark-to-market positions
+  at     DateTime @default(now())
+
+  @@index([userId, at])
+}
+
+model AuditLog {
+  id         BigInt   @id @default(autoincrement())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String?
+  reason     String?
+  data       Json?
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
