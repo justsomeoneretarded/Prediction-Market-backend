@@ -1,3 +1,4 @@
+import { rate } from '../common/validate';
 import { Body, Controller, Get, HttpCode, Patch, Post, Req, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import { z } from 'zod';
@@ -19,7 +20,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @Throttle(rate(5))
   async register(@Body() body: unknown, @ClientIp() ip: string | null, @Req() req: AuthedRequest, @Res({ passthrough: true }) res: Response) {
     const input = parse(registerSchema, body);
     await this.auth.register(input, ip);
@@ -30,7 +31,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @Throttle(rate(10))
   async login(@Body() body: unknown, @ClientIp() ip: string | null, @Req() req: AuthedRequest, @Res({ passthrough: true }) res: Response) {
     const input = parse(loginSchema, body);
     const s = await this.auth.login(input.login, input.password, { ip, userAgent: req.headers['user-agent'] });
@@ -67,7 +68,7 @@ export class AuthController {
 
   @Post('2fa/verify')
   @HttpCode(200)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @Throttle(rate(10))
   @Auth()
   verify2fa(@CurrentUser() user: AuthUser, @Body() body: unknown) {
     const { code } = parse(z.object({ code: z.string().regex(/^\d{6}$/) }), body);

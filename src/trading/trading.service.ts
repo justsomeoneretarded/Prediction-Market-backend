@@ -41,6 +41,16 @@ export class TradingService {
     private readonly portfolio: PortfolioService,
   ) {}
 
+  private readonly pending = new Set<Promise<unknown>>();
+  private track(p: Promise<unknown>) {
+    this.pending.add(p);
+    p.finally(() => this.pending.delete(p));
+  }
+  /** Wait for post-commit background work (used by tests and graceful shutdown). */
+  async idle() {
+    await Promise.allSettled([...this.pending]);
+  }
+
   private computeQuote(m: Market, input: z.infer<typeof quoteSchema>): Quote {
     try {
       const q = quote(stateOf(m), m.feeBps, input);
@@ -104,7 +114,7 @@ export class TradingService {
       ...this.viewTrade(trade), username: (await this.prisma.user.findUnique({ where: { id: userId }, select: { username: true } }))?.username,
     });
     this.rt.emitUser(userId, 'portfolio:update', { marketId: market.id });
-    this.portfolio.snapshot(userId).catch((e) => this.log.warn(`snapshot failed: ${e.message}`));
+    this.track(this.portfolio.snapshot(userId).catch((e) => this.log.warn(`snapshot failed: ${e.message}`)));
     return { trade: this.viewTrade(trade), position: this.portfolio.viewPositionRaw(position, market), replayed: false };
   }
 

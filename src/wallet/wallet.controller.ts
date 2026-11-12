@@ -1,3 +1,4 @@
+import { rate } from '../common/validate';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { z } from 'zod';
 import { Throttle } from '@nestjs/throttler';
@@ -27,7 +28,7 @@ export class WalletController {
 
   @Post('wallet/deposit')
   @Auth()
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @Throttle(rate(10))
   deposit(@CurrentUser() user: AuthUser, @Body() body: unknown) {
     const b = parse(moneyBody, body);
     return this.wallet.deposit(user.id, b.amount, b.idempotencyKey);
@@ -35,7 +36,7 @@ export class WalletController {
 
   @Post('wallet/withdraw')
   @Auth()
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @Throttle(rate(10))
   withdraw(@CurrentUser() user: AuthUser, @Body() body: unknown) {
     const b = parse(moneyBody, body);
     return this.wallet.requestWithdrawal(user.id, b.amount, b.idempotencyKey);

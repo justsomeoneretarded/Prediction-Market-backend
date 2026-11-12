@@ -6,4 +6,5 @@ module.exports = {
   testMatch: ['**/*.spec.ts'],
   setupFiles: ['<rootDir>/test/setup-env.ts'],
   testTimeout: 60000,
+  maxWorkers: 1, // integration suites share one test database
 };

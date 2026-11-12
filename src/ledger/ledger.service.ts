@@ -40,6 +40,9 @@ export class LedgerService {
     const marketId = opts.marketId ?? null;
     if (!userId && !marketId && this.systemIds.has(type)) return this.systemIds.get(type)!;
     const allowNegative = NEGATIVE_OK.includes(type);
+    // System accounts are created on the root client (committed immediately) so the id cache
+    // never points at a row from a transaction that might roll back.
+    if (!userId && !marketId) tx = this.prisma;
     await tx.$executeRaw`
       INSERT INTO "Account" ("id","type","userId","marketId","balance","allowNegative","createdAt")
       VALUES (${'acc_' + cryptoRandom()}, ${type}::"AccountType", ${userId}, ${marketId}, 0, ${allowNegative}, now())

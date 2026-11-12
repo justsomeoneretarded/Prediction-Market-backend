@@ -18,3 +18,6 @@ export const decimalString = (dp: number) =>
     .refine((v) => new RegExp(`^\\d+(\\.\\d{1,${dp}})?$`).test(v), `must be a positive number with at most ${dp} decimals`);
 
 export const idempotencyKey = z.string().min(8).max(100).regex(/^[A-Za-z0-9_\-:.]+$/);
+
+/** Per-route rate limit; relaxed under automated tests (which hammer endpoints from one IP). */
+export const rate = (limit: number, ttl = 60_000) => ({ default: { limit: process.env.NODE_ENV === 'test' ? limit * 1000 : limit, ttl } });

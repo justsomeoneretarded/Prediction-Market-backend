@@ -1,3 +1,4 @@
+import { rate } from '../common/validate';
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
@@ -11,14 +12,14 @@ export class TradingController {
   constructor(private readonly trading: TradingService) {}
 
   @Post('quote')
-  @Throttle({ default: { limit: 120, ttl: 60_000 } })
+  @Throttle(rate(120))
   quote(@Param('id') id: string, @Body() body: unknown, @Req() req: AuthedRequest) {
     return this.trading.preview(id, parse(quoteSchema, body), req.user?.id);
   }
 
   @Post('trade')
   @Auth()
-  @Throttle({ default: { limit: 30, ttl: 60_000 } })
+  @Throttle(rate(30))
   trade(@Param('id') id: string, @Body() body: unknown, @CurrentUser() user: AuthUser) {
     return this.trading.execute(user.id, id, parse(tradeSchema, body));
   }
